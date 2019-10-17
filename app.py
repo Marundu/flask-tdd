@@ -22,11 +22,12 @@ PASSWORD='admin'
 
 
 app=Flask(__name__)
+app.config.from_object(__name__)
 
 
-@app.route('/')
-def hello():
-    return 'Hello, Master Flasker!'
+#@app.route('/')
+#def hello():
+#    return 'Hello, Master Flasker!'
 
 
 if __name__=='__main__':

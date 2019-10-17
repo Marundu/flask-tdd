@@ -1,4 +1,25 @@
-from flask import Flask 
+import sqlite3
+from flask import (
+    Flask,
+    request,
+    session,
+    g,
+    redirect,
+    url_for,
+    abort,
+    render_template,
+    flash,
+    jsonify,
+    )
+
+
+# configuration 
+DATABASE='flaskr.db'
+DEBUG=True
+SECRET_KEY='iamamasterflasker'
+USERNAME='admin'
+PASSWORD='admin'
+
 
 app=Flask(__name__)
 

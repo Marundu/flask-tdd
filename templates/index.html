@@ -2,38 +2,43 @@
 <html>
 <head>
   <title>Flask</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body>
-  <div class="page">
+  <div class="container">
+    <br><br>
     <h1>Flask-TDD</h1>
-    
-    <div class="metanav">
+    <br><br>
+
       {% if not session.logged_in %}
-        <a href="{{ url_for('login') }}">Log In</a>
+        <a class="btn btn-success" role="button" href="{{ url_for('login') }}">Log In</a>
       {% else %}
-        <a href="{{ url_for('logout') }}">Log Out</a>
+        <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">Log Out</a>
       {% endif %}
-    </div>
+      
+      <br><br>
     
     {% for message in get_flashed_messages() %}
-      <div class="flash">{{ message }}</div>
+      <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
     {% endfor %}
     
     {% block body %}{% endblock %}
     
     {% if session.logged_in %}
-      <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+      <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">
         <dl>
           <dt>Title:</dt>
-          <dd><input type="text" size="30" name="title"></dd>
+          <dd><input type="text" size="30" name="title" class="form-control col-sm-4"></dd>
           <dt>Text:</dt>
-          <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
-          <dd><input type="submit" value="Share"></dd>
+          <dd><textarea name="text" rows="5" cols="40" class="form-control col-sm-4"></textarea></dd>
+          <br><br>
+          <dd><input type="submit" class="btn btn-primary" value="Share"></dd>
         </dl>
       </form>
     {% endif %}
+    
+    <br>
     
     <ul class="entries">
       {% for entry in entries %}

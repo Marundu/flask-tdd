@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Flask-TDD | Home</title>
+  <title>Flask-TDD | Search</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
@@ -23,18 +23,14 @@
     {% for message in get_flashed_messages() %}
       <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
     {% endfor %}
-    
-    {% block body %}{% endblock %}
-    
+   
     {% if session.logged_in %}
-      <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">
+      <form action="{{ url_for('search') }}" method="post" class="form-group">
         <dl>
-          <dt>Title:</dt>
-          <dd><input type="text" size="30" name="title" class="form-control col-sm-4"></dd>
-          <dt>Text:</dt>
-          <dd><textarea name="text" rows="5" cols="40" class="form-control col-sm-4"></textarea></dd>
-          <br><br>
-          <dd><input type="submit" class="btn btn-primary" value="Share"></dd>
+          <dt>Search:</dt>
+          <dd><input type="text" name="query" class="form-control col-sm-4"></dd>
+          <br>
+          <dd><input type="submit" class="btn btn-info" value="Search"></dd>
         </dl>
       </form>
     {% endif %}
@@ -43,12 +39,9 @@
     
     <ul class="entries">
       {% for entry in entries %}
-        <li class="entry">
-          <h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>
-          {{ entry.text|safe }}
-        </li>
-      {% else %}
-        <li><em>No entries so far 0_o</em></li>
+        {% if query.lower() in entry.title.lower() or query.lower() in entry.text.lower() %}
+          <li class="entry"><h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+        {% endif %}
       {% endfor %}
     </ul>
   </div>

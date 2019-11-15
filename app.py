@@ -13,6 +13,8 @@ from flask import (
     jsonify,
     )
 
+from functools import wraps
+
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -43,6 +45,16 @@ db=SQLAlchemy(app)
 
 
 import models
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            flash('Please log in!')
+            return jsonify({'status': 0, 'message': 'Please log in!'}), 401
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route('/')
@@ -89,7 +101,8 @@ def add_entry():
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<post_id>', methods=['GET'])
+@app.route('/delete/<int:post_id>', methods=['GET'])
+@login_required
 def delete_entry(post_id):
     '''Delete a post form the database.'''
     result={'status': 0, 'message': 'Error'}
@@ -98,6 +111,7 @@ def delete_entry(post_id):
         db.session.query(models.Flaskr).filter_by(post_id=new_id).delete()
         db.session.commit()
         result={'status': 1, 'message': 'Post Deleted!'}
+        flash('Post deleted!')
     except Exception as e:
         result={'status': 0, 'message': repr(e)}
     return jsonify(result)
